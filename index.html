@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join VybeHaus Party</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .card {
+      background: #24243E;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 20px;
+      padding: 32px 24px;
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .logo-text {
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .logo-accent {
+      color: #E94560;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* Loading State */
+    .state {
+      display: none;
+    }
+
+    .state.active {
+      display: block;
+    }
+
+    .loading {
+      text-align: center;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(233, 69, 96, 0.2);
+      border-top-color: #E94560;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 14px;
+    }
+
+    /* Party Info State */
+    .party-info {
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    .party-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+      word-break: break-word;
+    }
+
+    .party-host {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 12px;
+    }
+
+    .party-type {
+      display: inline-block;
+      background: rgba(233, 69, 96, 0.15);
+      border: 1px solid rgba(233, 69, 96, 0.3);
+      color: #E94560;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    /* Form State */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 16px;
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(233, 69, 96, 0.4);
+      box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.1);
+    }
+
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* Button */
+    .btn {
+      width: 100%;
+      padding: 14px 16px;
+      background: #E94560;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 8px;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Success State */
+    .success-icon {
+      width: 56px;
+      height: 56px;
+      background: rgba(34, 197, 94, 0.15);
+      border: 2px solid #22C55E;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 28px;
+    }
+
+    .success-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .success-text {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* Error State */
+    .error-box {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .error-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #EF4444;
+      margin-bottom: 4px;
+    }
+
+    .error-text {
+      font-size: 13px;
+      color: rgba(239, 68, 68, 0.8);
+      line-height: 1.4;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .card {
+        padding: 24px 16px;
+      }
+
+      .party-name {
+        font-size: 20px;
+      }
+
+      .btn {
+        padding: 12px 16px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <!-- Logo -->
+      <div class="logo">
+        <div class="logo-text">Vybe<span class="logo-accent">Haus</span></div>
+        <div class="subtitle">Join the party</div>
+      </div>
+
+      <!-- Loading State -->
+      <div id="loadingState" class="state active">
+        <div class="loading">
+          <div class="spinner"></div>
+          <div class="loading-text">Loading party details...</div>
+        </div>
+      </div>
+
+      <!-- Form State -->
+      <div id="formState" class="state">
+        <div class="party-info">
+          <div class="party-name" id="partyName"></div>
+          <div class="party-host">Hosted by <span id="hostName"></span></div>
+          <div class="party-type" id="eventType"></div>
+        </div>
+
+        <form id="joinForm">
+          <div class="form-group">
+            <label class="form-label">Your Name</label>
+            <input 
+              type="text" 
+              id="guestName" 
+              class="form-input"
+              placeholder="Enter your name"
+              autocomplete="name"
+              required
+            >
+          </div>
+          <button type="submit" class="btn">Join the Party</button>
+        </form>
+      </div>
+
+      <!-- Success State -->
+      <div id="successState" class="state">
+        <div class="success-icon">✓</div>
+        <div class="success-title">You're in!</div>
+        <div class="success-text">
+          You've joined the party. The host will see you in a moment. Get ready to vote and have fun!
+        </div>
+      </div>
+
+      <!-- Error State -->
+      <div id="errorState" class="state">
+        <div class="error-box">
+          <div class="error-title">Something went wrong</div>
+          <div class="error-text" id="errorMessage"></div>
+        </div>
+        <button class="btn" onclick="location.reload()">Try Again</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Supabase config
+    const SUPABASE_URL = 'https://fvmisdqammbsvjbhpznd.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJKV1QiLCJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2bWlzZHFhbW1ic3ZqYmhwem5kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk3NzMxNDQsImV4cCI6MjAyNTM0OTEwNH0.7X2nxC_2x9U8Y9Z0a1B2c3D4e5F6g7H8i9J0k1L2m3N4';
+
+    class SupabaseClient {
+      constructor(url, key) {
+        this.url = url;
+        this.key = key;
+      }
+
+      async request(method, path, body = null) {
+        const options = {
+          method,
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': this.key,
+            'Authorization': `Bearer ${this.key}`,
+          },
+        };
+
+        if (body) {
+          options.body = JSON.stringify(body);
+        }
+
+        const response = await fetch(`${this.url}/rest/v1${path}`, options);
+        
+        if (!response.ok) {
+          throw new Error(`Request failed: ${response.statusText}`);
+        }
+
+        return response.json();
+      }
+
+      async select(table, filters = {}) {
+        let query = `${table}?select=*`;
+        for (const [key, value] of Object.entries(filters)) {
+          query += `&${key}=eq.${value}`;
+        }
+        return this.request('GET', `/${query}`);
+      }
+
+      async insert(table, data) {
+        return this.request('POST', `/${table}`, data);
+      }
+    }
+
+    const supabase = new SupabaseClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // State management
+    function setState(stateName) {
+      document.querySelectorAll('.state').forEach(s => s.classList.remove('active'));
+      document.getElementById(`${stateName}State`).classList.add('active');
+    }
+
+    // Get guest code from URL
+    function getGuestCode() {
+      const pathname = window.location.pathname;
+      const match = pathname.match(/\/join\/([a-zA-Z0-9]+)/);
+      return match ? match[1] : null;
+    }
+
+    // Load party details
+    async function loadPartyDetails() {
+      try {
+        const guestCode = getGuestCode();
+        if (!guestCode) {
+          throw new Error('Invalid party link');
+        }
+
+        const parties = await supabase.select('parties', { guest_code: guestCode });
+        
+        if (!parties || parties.length === 0) {
+          throw new Error('Party not found');
+        }
+
+        const party = parties[0];
+        const profiles = await supabase.select('profiles', { id: party.host_id });
+        const host = profiles && profiles.length > 0 ? profiles[0] : null;
+
+        // Populate form
+        document.getElementById('partyName').textContent = party.name;
+        document.getElementById('hostName').textContent = host?.preferred_name || 'Host';
+        document.getElementById('eventType').textContent = party.event_type;
+
+        // Store party ID for submission
+        document.getElementById('joinForm').dataset.partyId = party.id;
+
+        setState('form');
+      } catch (error) {
+        console.error('Load party error:', error);
+        document.getElementById('errorMessage').textContent = error.message || 'Failed to load party details';
+        setState('error');
+      }
+    }
+
+    // Handle form submission
+    document.getElementById('joinForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const partyId = e.target.dataset.partyId;
+      const guestName = document.getElementById('guestName').value.trim();
+      const btn = e.target.querySelector('button');
+
+      if (!guestName) {
+        alert('Please enter your name');
+        return;
+      }
+
+      btn.disabled = true;
+
+      try {
+        await supabase.insert('guest_sessions', {
+          party_id: partyId,
+          guest_name: guestName,
+          joined_at: new Date().toISOString(),
+        });
+
+        setState('success');
+      } catch (error) {
+        console.error('Join party error:', error);
+        document.getElementById('errorMessage').textContent = error.message || 'Failed to join party';
+        setState('error');
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    // Initialize
+    loadPartyDetails();
+  </script>
+</body>
+</html>
